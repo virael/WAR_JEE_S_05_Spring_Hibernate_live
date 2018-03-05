@@ -29,6 +29,7 @@ public class JPABookDao implements BookDao {
 	@Override
 	public Book findById(final long id) {
 		final Book book = em.find(Book.class, id);
+		
 		return book;
 	}
 

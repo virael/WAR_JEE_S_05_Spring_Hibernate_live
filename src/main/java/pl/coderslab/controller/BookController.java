@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import pl.coderslab.dao.BookDao;
 import pl.coderslab.entity.Book;
+import pl.coderslab.entity.Publisher;
 
 @RestController
 public class BookController {
@@ -21,6 +22,9 @@ public class BookController {
 		
 		final Book book = bookDao.findById(1);
 		
+		final Publisher publisher = book.getPublisher();
+		publisher.setBooks(null);
+		
 		return book;
 	}
 	
@@ -31,7 +35,11 @@ public class BookController {
 		book.setTitle("Elementarz");
 		book.setAuthor("Jan Kowalski");
 		book.setDescription("Ala ma kota");
-		book.setPublisher("Helion");
+		
+		final Publisher publisher = new Publisher();
+		publisher.setId(1L);
+		
+		book.setPublisher(publisher);
 		book.setRating((byte) 5);
 		bookDao.add(book);
 		

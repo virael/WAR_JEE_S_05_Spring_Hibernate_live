@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,10 +21,12 @@ public class Book {
 	private String author;
 	
 	private byte rating = 1;
-		
-	private String publisher;
 	
 	private String description;
+	
+	@ManyToOne
+	@JoinColumn(name = "id_publisher")
+	private Publisher publisher;
 
 	public Long getId() {
 		return id;
@@ -56,14 +60,6 @@ public class Book {
 		this.rating = rating;
 	}
 
-	public String getPublisher() {
-		return publisher;
-	}
-
-	public void setPublisher(String publisher) {
-		this.publisher = publisher;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -71,10 +67,17 @@ public class Book {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	public Publisher getPublisher() {
+		return publisher;
+	}
+
+	public void setPublisher(Publisher publisher) {
+		this.publisher = publisher;
+	}
 
 	@Override
 	public String toString() {
-		return "Book [id=" + id + ", title=" + title + ", author=" + author + ", rating=" + rating + ", publisher="
-				+ publisher + ", description=" + description + "]";
+		return "Book [id=" + id + ", title=" + title + ", author=" + author + ", rating=" + rating + ", description=" + description + "]";
 	}
 }

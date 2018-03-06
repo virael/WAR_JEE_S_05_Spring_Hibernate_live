@@ -1,65 +1,50 @@
 package pl.coderslab.controller;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import pl.coderslab.dao.PersonDao;
 import pl.coderslab.entity.Person;
-import pl.coderslab.entity.PersonDetails;
 
-@RestController
+@Controller
 public class PersonController {
-	
+
 	@Autowired
 	private PersonDao personDao;
-	
-	@GetMapping(path = "/person")
-	public Person findPersonById() {
-		
-		final Person person = personDao.findById(1);
-		return person;
-	}
-	
-	@PostMapping(path = "/person")
-	public Person addPerson() {
 
-		final Person person = new Person();
-		person.setLogin("test login");
-		person.setPassword("test password");
-		person.setEmail("mail@mail");
-		
-		final PersonDetails personDetails = new PersonDetails();
-		personDetails.setCity("Warszawa");
-		personDetails.setFirstName("Jan");
-		personDetails.setLastName("Nowak");
-		personDetails.setStreet("Polna");
-		personDetails.setStreetNumber((byte)2);
-		
-		person.setPersonDetails(personDetails);
-		
-		personDao.add(person);
-		
-		return person;
-	}
-
-	@PutMapping(path = "/person")
-	public Person editPerson() {
+	@GetMapping(path = "/person/add")
+	public String showRegistartionForm(final Model model) {
 		
 		final Person person = new Person();
-		person.setId(1L);
-		person.setEmail("new_mail@mail");
+		model.addAttribute("person", person);
 		
-		personDao.edit(person);
-		
-		return person;
+		return "person/add";
 	}
 
-	@DeleteMapping(path = "/person")
-	public void removePersonById() {
-		personDao.removeById(1);
+	@PostMapping(path = "/person/add")
+	public String registerPerson(final @ModelAttribute("person") Person person) {
+		
+		final String login = person.getLogin();
+		final String email = person.getEmail();
+		final String password = person.getPassword();
+		
+		if (login != null && !login.isEmpty() && email != null && !email.isEmpty() && password != null
+				&& !password.isEmpty()) {
+			
+			final String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(10));
+			
+			person.setPassword(hashedPassword);
+
+			personDao.add(person);
+			
+			return "person/success";
+		}
+
+		return "person/failure";
 	}
 }

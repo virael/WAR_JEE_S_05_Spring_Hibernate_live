@@ -1,9 +1,14 @@
 package pl.coderslab.entity;
 
+import java.util.Collection;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -16,14 +21,16 @@ public class Book {
 	private Long id;
 	
 	private String title;
-
-	private String author;
 	
 	private byte rating = 1;
 	
 	private String description;
 	
+	@ManyToMany(mappedBy = "books", fetch = FetchType.EAGER)
+	private Collection<Author> authors;
+	
 	@ManyToOne
+	@JoinColumn(name = "publisher_id")
 	private Publisher publisher;
 
 	public Long getId() {
@@ -40,14 +47,6 @@ public class Book {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(String author) {
-		this.author = author;
 	}
 
 	public byte getRating() {
@@ -73,9 +72,17 @@ public class Book {
 	public void setPublisher(Publisher publisher) {
 		this.publisher = publisher;
 	}
+	
+	public Collection<Author> getAuthors() {
+		return authors;
+	}
+
+	public void setAuthors(Collection<Author> authors) {
+		this.authors = authors;
+	}
 
 	@Override
 	public String toString() {
-		return "Book [id=" + id + ", title=" + title + ", author=" + author + ", rating=" + rating + ", description=" + description + "]";
+		return "Book [id=" + id + ", title=" + title + ", rating=" + rating + ", description=" + description + "]";
 	}
 }

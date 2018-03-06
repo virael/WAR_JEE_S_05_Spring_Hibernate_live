@@ -1,7 +1,11 @@
 package pl.coderslab.dao.impl;
 
+import java.util.Collection;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +33,6 @@ public class JPABookDao implements BookDao {
 	@Override
 	public Book findById(final long id) {
 		final Book book = em.find(Book.class, id);
-		
 		return book;
 	}
 
@@ -39,5 +42,15 @@ public class JPABookDao implements BookDao {
 		if(book != null) {
 			em.remove(book);
 		}
+	}
+
+	@Override
+	public Collection<Book> getRatingList(final byte rating) {
+		
+		final Query query = em.createQuery("select b from Book b where b.rating = :rating");
+		query.setParameter("rating", rating);
+		
+		final List<Book> books = query.getResultList();
+		return books;
 	}
 }

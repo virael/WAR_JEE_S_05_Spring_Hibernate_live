@@ -53,4 +53,13 @@ public class JPABookDao implements BookDao {
 		final List<Book> books = query.getResultList();
 		return books;
 	}
+	
+	@Override
+	public Collection<Book> findAll() {
+		
+		final Query query = em.createQuery("select b from Book b");
+		
+		final List<Book> books = query.getResultList();
+		return books;
+	}
 }

@@ -12,4 +12,6 @@ public interface BookDao {
 	void removeById(long id);
 	
 	Collection<Book> getRatingList(byte rating);
+	
+	Collection<Book> findAll();
 }

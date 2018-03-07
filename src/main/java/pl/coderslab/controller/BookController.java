@@ -37,7 +37,16 @@ public class BookController {
 			
 		bookDao.add(book);
 		
-		return "book/success";
+		return "redirect:list";
+	}
+	
+	@GetMapping(path = "/book/list")
+	public String showAllBooks(final Model model) {
+		
+		final Collection<Book> books = bookDao.findAll();
+		
+		model.addAttribute("books", books);
+		return "book/list";
 	}
 	
 	@ModelAttribute("publishers")

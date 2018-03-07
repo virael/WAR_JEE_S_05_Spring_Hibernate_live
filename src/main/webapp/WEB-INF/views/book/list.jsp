@@ -15,6 +15,7 @@
         <th>Rating</th>
         <th>Opis</th>
         <th>Wydawca</th>
+        <th>Liczba stron</th>
     </tr>
     <c:forEach items="${books}" var="book">
         <tr>
@@ -26,6 +27,9 @@
             <td>${book.rating}</td>
             <td>${book.description}</td>
             <td>${book.publisher.name}</td>
+            <td>${book.pages}</td>
+            <td><a href="<c:url value='edit?id=${book.id}'/>">Edytuj książkę</a></td>
+            <td><a href="<c:url value='remove?id=${book.id}'/>">Usuń książkę</a></td>
         </tr>
     </c:forEach>
   </table>
